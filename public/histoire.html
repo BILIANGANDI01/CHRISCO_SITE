@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histoire & Galerie — Église CHRISCO</title>
+  <link rel="icon" type="image/png" href="images/bg-chrisco-optimized.png">
+  <style>
+    :root {
+      --primary: #1e5bd9;
+      --dark: #0f1a3a;
+      --light: #f5f7fa;
+    }
+    body { margin:0; font-family:'Segoe UI',Roboto,sans-serif; background:var(--light); color:#222; line-height:1.6; }
+    header { background:linear-gradient(90deg,var(--dark),var(--primary)); color:white; text-align:center; padding:40px 10px; }
+    h1 { margin:0; font-size:1.8rem; }
+    section { max-width:1100px; margin:50px auto; padding:0 20px; }
+    h2 { color:var(--primary); border-left:4px solid var(--primary); padding-left:10px; }
+    p { text-align:justify; }
+    .gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-top:20px; }
+    .gallery img { width:100%; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.2); transition:transform 0.3s; }
+    .gallery img:hover { transform:scale(1.05); }
+    .videos { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; margin-top:20px; }
+    iframe { width:100%; height:200px; border:none; border-radius:10px; }
+    footer { background:linear-gradient(90deg,var(--dark),var(--primary)); color:white; text-align:center; padding:30px 10px; margin-top:50px; }
+    footer a { color:#66a3ff; text-decoration:none; font-size:0.85rem; }
+  </style>
+</head>
+<body>
+  <!-- MENU MOBILE -->
+<div class="mobile-header">
+  <div class="logo">CHRISCO</div>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+</div>
+
+<nav id="mobileMenu" class="mobile-menu">
+  <a href="index.html" class="nav-item">Accueil</a>
+  <a href="apropos.html" class="nav-item">À propos</a>
+  <a href="ministeres.html" class="nav-item">Ministères</a>
+  <a href="organigramme.html" class="nav-item">Organigramme</a>
+  <a href="programme.html" class="nav-item">Programme</a>
+  <a href="galerie_photos.html" class="nav-item">Photos</a>
+  <a href="galerie_videos.html" class="nav-item">Vidéos</a>
+  <a href="implantations.html" class="nav-item">Implantations</a>
+  
+</nav>
+
+
+  <!-- ======= MENU GLOBAL CHRISCO ======= -->
+  <!-- (colle ici ton bloc NAV avec surlignage automatique) -->
+
+  <header>
+    <img src="images/bg-chrisco-optimized.png" alt="Logo CHRISCO" style="height:80px;">
+    <h1>Histoire & Galerie de l’Église CHRISCO</h1>
+  </header>
+
+  <!-- ======= HISTOIRE ======= -->
+  <section id="histoire">
+    <h2>Notre Histoire</h2>
+    <p>
+      L’Église <strong>CHRISCO — Christ et Compagnons</strong> est née d’une vision divine : celle de bâtir une communauté
+      centrée sur Jésus-Christ, animée par le Saint-Esprit et engagée à transformer les vies par la Parole.
+    </p>
+    <p>
+      Fondée dans les années 2000, CHRISCO a connu une croissance rapide, s’étendant à plusieurs paroisses
+      et formant des générations de leaders et serviteurs passionnés pour le Royaume de Dieu.
+    </p>
+    <p>
+      Aujourd’hui, CHRISCO poursuit sa mission d’évangélisation, d’édification et de compassion,
+      sous la conduite du Saint-Esprit, avec pour mot d’ordre : <em>« Christ au centre de tout ! »</em>
+    </p>
+  </section>
+
+  <!-- ======= GALERIE PHOTOS ======= -->
+  <section id="photos">
+    <h2>Album Photos</h2>
+    <p>Quelques moments forts des cultes, retraites et événements de l’Église CHRISCO.</p>
+
+    <div class="gallery">
+      <img src="IMG-20240215-WA0227.jpg" alt="Culte CHRISCO">
+      <img src="WhatsApp Image 2023-04-22 at 13.07.49.jpeg" alt="Louange CHRISCO">
+      <img src="WhatsApp Image 2023-04-26 at 07.28.30.jpeg" alt="Prière CHRISCO">
+      <!-- 👉 Tu peux ajouter d’autres images ici -->
+    </div>
+  </section>
+
+<!-- ======= GALERIE DYNAMIQUE ======= -->
+<section id="galerie">
+  <h2>Albums Photos & Vidéos</h2>
+  <p>Découvrez nos moments forts et cultes CHRISCO récents.</p>
+
+  <div id="photosContainer" class="gallery">
+    <p>Chargement des photos...</p>
+  </div>
+
+  <div id="videosContainer" class="videos" style="margin-top:40px;">
+    <p>Chargement des vidéos...</p>
+  </div>
+</section>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+  if (typeof firebaseConfig !== "undefined") {
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const photosContainer = document.getElementById("photosContainer");
+    const videosContainer = document.getElementById("videosContainer");
+
+    // Charger les photos
+    db.collection("albums").doc("photos").collection("list").orderBy("date", "desc").onSnapshot(snapshot => {
+      if (snapshot.empty) {
+        photosContainer.innerHTML = "<p style='color:#666'>Aucune photo pour le moment.</p>";
+        return;
+      }
+      let html = "";
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        html += `<img src="${data.url}" alt="${data.titre}" title="${data.titre}">`;
+      });
+      photosContainer.innerHTML = html;
+    });
+
+    // Charger les vidéos
+    db.collection("albums").doc("videos").collection("list").orderBy("date", "desc").onSnapshot(snapshot => {
+      if (snapshot.empty) {
+        videosContainer.innerHTML = "<p style='color:#666'>Aucune vidéo disponible.</p>";
+        return;
+      }
+      let html = "";
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        html += `<iframe src="${data.url}" title="${data.titre}" allowfullscreen></iframe>`;
+      });
+      videosContainer.innerHTML = html;
+    });
+  } else {
+    console.error("firebase-config.js manquant !");
+  }
+</script>
+
+
+  <footer>
+    <p>© 2025 Église CHRISCO — Christ et Compagnons</p>
+    <p><a href="admin.html" target="_blank">🔒 Espace administrateur</a></p>
+  </footer>
+</body>
+</html>

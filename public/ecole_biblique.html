@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>École Biblique — CHRISCO</title>
+
+<link rel="stylesheet" href="styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root{--blue:#0b2e59;--red:#c50000;--white:#fff;--bg:#f5f6fa;}
+body{font-family:Inter,Arial;margin:0;background:var(--bg)}
+.header{position:sticky;top:0;background:var(--blue);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.header img{height:48px}
+.container{max-width:1100px;margin:20px auto;padding:16px}
+.title{color:var(--blue);border-left:6px solid var(--red);padding-left:10px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(9,30,66,.06)}
+.card h3{margin:6px 0;color:var(--blue)}
+.small{color:#666;font-size:14px}
+.meta{display:flex;gap:10px;color:#444;font-size:13px;margin-top:8px}
+.cta{margin-top:12px;display:inline-block;background:var(--blue);color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none}
+@media(max-width:700px){ .meta{flex-direction:column;gap:4px} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <img src="images/LOGO CHRISCO dac.png" alt="logo">
+    <strong>CHRISCO</strong>
+  </div>
+  <nav style="display:flex;gap:10px;align-items:center">
+    <a href="index.html" style="color:#fff;text-decoration:none">Accueil</a>
+    <a href="ecole_biblique.html" style="color:#fff;text-decoration:underline">École Biblique</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h2 class="title">École Biblique — Cours & Sessions</h2>
+  <p class="small">Programme des cours bibliques et sessions de formation. Inscription via l'administration.</p>
+
+  <div id="list" class="grid">
+    <div>Chargement…</div>
+  </div>
+</main>
+
+<script>
+if(!window.firebaseConfig) alert('firebase-config.js manquant');
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+
+const list = document.getElementById('list');
+
+db.collection('ecole_biblique').orderBy('date','desc').onSnapshot(snap=>{
+  if(snap.empty){ list.innerHTML = '<div class="card">Aucun cours pour le moment.</div>'; return; }
+  list.innerHTML = snap.docs.map(doc=>{
+    const d = doc.data();
+    const date = d.date && d.date.toDate ? new Date(d.date.toDate()).toLocaleDateString('fr-FR') : (d.date||'');
+    return `<article class="card">
+      <h3>${escapeHtml(d.titre||'')}</h3>
+      <div class="small">${escapeHtml(d.sous_titre||'')}</div>
+      <div class="meta">
+        <div><strong>Date:</strong> ${date}</div>
+        <div><strong>Heure:</strong> ${escapeHtml(d.heure||'')}</div>
+        <div><strong>Enseignant:</strong> ${escapeHtml(d.enseignant||'')}</div>
+      </div>
+      <p style="margin-top:8px">${d.description||''}</p>
+      ${d.lien_inscription ? `<a class="cta" href="${d.lien_inscription}" target="_blank">S'inscrire</a>` : ''}
+    </article>`;
+  }).join('');
+});
+
+// helper sanitize for display
+function escapeHtml(s){ return (s||'').toString().replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHRISCO — Ministères</title>
+
+<!-- Styles globaux -->
+<link rel="stylesheet" href="styles.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+/* PAGE STYLES */
+:root{
+  --blue:#0b2e59;
+  --red:#c50000;
+  --white:#ffffff;
+  --bg:#f5f6fa;
+}
+
+body{
+  background: var(--bg);
+  margin:0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* HEADER (reprise du site) */
+.header{
+  position: sticky;
+  top: 0;
+  background: var(--blue);
+  color: white;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header img{
+  height: 50px;
+}
+
+.nav a{
+  color: white;
+  text-decoration: none;
+  margin-left: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.nav a.active{
+  background: var(--red);
+}
+
+/* TABLEAU */
+.table-container{
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+h2{
+  color: var(--blue);
+  text-align:center;
+  border-left: 6px solid var(--red);
+  padding-left: 10px;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th{
+  background: var(--blue);
+  color:white;
+  padding: 12px;
+  text-align: left;
+}
+
+td{
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even){
+  background: #f0f4ff;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+  table, thead, tbody, th, td, tr{
+    display:block;
+  }
+  tr{ margin-bottom: 16px; }
+  td{
+    text-align:right;
+    padding-left:50%;
+    position:relative;
+  }
+  td::before{
+    content: attr(data-label);
+    position:absolute;
+    left:0;
+    font-weight: bold;
+    color: var(--blue);
+  }
+}
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="images/LOGO CHRISCO dac.png">
+    <strong>CHRISCO</strong>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Accueil</a>
+    <a href="ministeres.html" class="active">Ministères</a>
+    <a href="organigramme.html">Organigramme</a>
+    <a href="programme.html">Programme</a>
+    <a href="vision.html">Vision</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<!-- CONTENU -->
+<div class="table-container">
+  <h2>Ministères de l'Église CHRISCO</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ministères</th>
+        <th>Responsables</th>
+        <th>Contacts</th>
+      </tr>
+    </thead>
+    <tbody id="minList">
+      <tr><td colspan="3">Chargement…</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- FIRESTORE SCRIPT -->
+<script>
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+
+const minList = document.getElementById("minList");
+
+// Charge les ministères depuis Firestore
+db.collection("ministeres")
+  .orderBy("date","desc")
+  .onSnapshot(snap=>{
+    if(snap.empty){
+      minList.innerHTML = `<tr><td colspan="3">Aucun ministère enregistré.</td></tr>`;
+      return;
+    }
+
+    minList.innerHTML = snap.docs.map(doc=>{
+      const d = doc.data();
+      return `
+        <tr>
+          <td data-label="Ministère">${d.nom || ''}</td>
+          <td data-label="Responsable">${d.responsable || ''}</td>
+          <td data-label="Contact">${d.contact || ''}</td>
+        </tr>
+      `;
+    }).join("");
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+/* ==============
+   PALETTE CHRISCO
+   ============== */
+:root {
+  --blue: #0a2b6e;
+  --blue-light: #123c95;
+  --red: #c50000;
+  --white: #ffffff;
+  --gray-bg: #f4f6fa;
+  --text-dark: #1a1a1a;
+  --text-light: #777;
+}
+
+/* ==============
+   GLOBAL
+   ============== */
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--gray-bg);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: var(--text-dark);
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: var(--blue);
+}
+
+/* ==============
+   LOGIN PAGE
+   ============== */
+
+#loginView {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--blue), var(--blue-light));
+}
+
+.login-card {
+  background: white;
+  width: 340px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.login-card img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.login-card h1 {
+  font-size: 1.6rem;
+  color: var(--blue);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  background: var(--red);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-card button:hover {
+  background: #990000;
+}
+
+/* ==============
+   LAYOUT ADMIN
+   ============== */
+
+#adminView {
+  display: none;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: var(--blue);
+  color: white;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px 0;
+}
+
+.sidebar h2 {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 14px 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  border-left: 4px solid transparent;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: var(--blue-light);
+  border-left: 4px solid var(--red);
+}
+
+.logout-btn {
+  margin-top: 30px;
+  padding: 12px 20px;
+  background: #ffdddd33;
+  color: #ffbbbb;
+  border: none;
+  width: 90%;
+  display: block;
+  margin-left: 5%;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  background: #ffaaaa44;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 250px;
+  padding: 25px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* CARD DESIGN */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  margin-bottom: 25px;
+}
+
+/* INPUTS STYLES */
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
+}
+
+button.save-btn {
+  padding: 12px 20px;
+  background: var(--blue);
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+button.save-btn:hover {
+  background: var(--blue-light);
+}
+
+/* NOTIFICATION POPUP */
+.popupNotif {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: var(--blue);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  animation: fadeInOut 4s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* DASHBOARD */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 15px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--blue);
+}
+.stat-value.small {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+/* MOBILE FIX */
+@media (max-width: 800px) {
+  .sidebar {
+    width: 75px;
+  }
+  .sidebar a {
+    font-size: 13px;
+    padding: 12px 9px;
+  }
+  .main-content {
+    margin-left: 75px;
+  }
+}

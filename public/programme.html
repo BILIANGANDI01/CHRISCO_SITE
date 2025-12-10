@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme CHRISCO</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* ===== PAGE GLOBAL ===== */
+body {
+    background: #f4f6fa;
+    font-family: "Inter", sans-serif;
+    padding: 20px;
+}
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* ===== TITRES ===== */
+h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #0b2e59;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #0b2e59;
+}
+
+/* ===== PROGRAMME DE LA SEMAINE ===== */
+.programme-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.programme-item {
+    background: white;
+    padding: 18px 20px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.icon-box {
+    font-size: 26px;
+    margin-right: 12px;
+    color: #0b2e59;
+}
+
+.programme-left {
+    display: flex;
+    align-items: center;
+}
+
+.programme-day {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.programme-title {
+    margin-top: 4px;
+    color: #444;
+}
+
+/* Heure */
+.programme-hour {
+    background: #0b2e59;
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+}
+
+/* ===== CALENDRIER ===== */
+#calendar {
+    margin-top: 25px;
+    padding: 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.calendar-event {
+    padding: 10px 12px;
+    background: #e8eef9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-left: 4px solid #0b2e59;
+}
+
+.calendar-event-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.calendar-event-date {
+    font-size: 14px;
+    color: #777;
+}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Programme de l'Église</h1>
+
+    <!-- PROGRAMME DE LA SEMAINE -->
+    <div class="section-title">Programme de la semaine</div>
+    <div id="semaineList" class="programme-list"></div>
+
+    <!-- ÉVÉNEMENTS SPÉCIAUX -->
+    <div class="section-title">Événements spéciaux</div>
+    <div id="evenementsList"></div>
+
+    <!-- CALENDRIER DYNAMIQUE -->
+    <div class="section-title">Calendrier des événements</div>
+    <div id="calendar"></div>
+
+</div>
+
+<script>
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+
+/* ================================
+   1) PROGRAMME DE LA SEMAINE
+================================ */
+async function loadProgrammeSemaine() {
+    const div = document.getElementById("semaineList");
+    const snap = await db.collection("programme").doc("semaine").get();
+
+    if (!snap.exists || !snap.data().programmes) {
+        div.innerHTML = "<p>Aucun programme disponible.</p>";
+        return;
+    }
+
+    div.innerHTML = snap.data().programmes.map(p => `
+        <div class="programme-item">
+            <div class="programme-left">
+                <div class="icon-box">${getIcon(p.icon)}</div>
+                <div>
+                    <div class="programme-day">${p.jour}</div>
+                    <div class="programme-title">${p.titre}</div>
+                </div>
+            </div>
+            <div class="programme-hour">${p.heure}</div>
+        </div>
+    `).join("");
+}
+
+/* ================================
+   2) ÉVÉNEMENTS SPÉCIAUX
+================================ */
+async function loadEvenements() {
+    const div = document.getElementById("evenementsList");
+    const snap = await db.collection("programme").doc("evenements").get();
+
+    if (!snap.exists || !snap.data().events) {
+        div.innerHTML = "<p>Aucun événement spécial.</p>";
+        return;
+    }
+
+    div.innerHTML = snap.data().events.map(e => `
+        <div class="calendar-event">
+            <div class="calendar-event-title">${getIcon(e.icon)} ${e.titre}</div>
+            <div class="calendar-event-date">${e.date} — ${e.heure}</div>
+        </div>
+    `).join("");
+}
+
+/* ================================
+   3) CALENDRIER INTERACTIF
+================================ */
+async function loadCalendar() {
+    const div = document.getElementById("calendar");
+    const snap = await db.collection("programme").doc("evenements").get();
+
+    if (!snap.exists || !snap.data().events) {
+        div.innerHTML = "<p>Aucun événement au calendrier.</p>";
+        return;
+    }
+
+    div.innerHTML = snap.data().events.map(e => `
+        <div class="calendar-event">
+            <div class="calendar-event-title">${getIcon(e.icon)} ${e.titre}</div>
+            <div class="calendar-event-date">${e.date} — ${e.heure}</div>
+        </div>
+    `).join("");
+}
+
+/* ================================
+   ICÔNES
+================================ */
+function getIcon(name) {
+    const icons = {
+        prayer: "<i class='fas fa-hands-praying'></i>",
+        bible: "<i class='fas fa-book-bible'></i>",
+        worship: "<i class='fas fa-music'></i>",
+        event: "<i class='fas fa-calendar-star'></i>",
+        conference: "<i class='fas fa-users'></i>",
+        youth: "<i class='fas fa-user-group'></i>",
+        default: "<i class='fas fa-church'></i>"
+    };
+    return icons[name] || icons.default;
+}
+
+loadProgrammeSemaine();
+loadEvenements();
+loadCalendar();
+
+</script>
+
+</body>
+</html>

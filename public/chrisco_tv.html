@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHRISCO TV</title>
+
+<link rel="stylesheet" href="styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root{--blue:#0b2e59;--red:#c50000;--bg:#f5f6fa}
+body{font-family:Inter,Arial;background:var(--bg);margin:0}
+.header{position:sticky;top:0;background:var(--blue);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.container{max-width:1100px;margin:20px auto;padding:16px}
+.title{color:var(--blue);border-left:6px solid var(--red);padding-left:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:12px}
+.card{background:#fff;padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(9,30,66,.04)}
+.card iframe{width:100%;height:200px;border-radius:8px;border:none}
+.small{color:#666}
+</style>
+</head>
+<body>
+<header class="header">
+  <div style="display:flex;gap:10px;align-items:center"><img src="images/LOGO CHRISCO dac.png" style="height:48px"><strong>CHRISCO</strong></div>
+  <nav><a href="index.html" style="color:#fff;text-decoration:none">Accueil</a></nav>
+</header>
+
+<main class="container">
+  <h2 class="title">CHRISCO TV</h2>
+  <p class="small">Retrouvez nos vidéos — cultes, enseignements et émissions.</p>
+
+  <div id="tvGrid" class="grid">Chargement…</div>
+</main>
+
+<script>
+if(!window.firebaseConfig) alert('firebase-config.js manquant');
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+const grid = document.getElementById('tvGrid');
+
+db.collection('chrisco_tv').orderBy('date','desc').onSnapshot(snap=>{
+  if(snap.empty){ grid.innerHTML = '<div class="card">Aucune vidéo.</div>'; return; }
+  grid.innerHTML = snap.docs.map(doc=>{
+    const d = doc.data();
+    // d.url is expected to be an embed url (https://www.youtube.com/embed/...)
+    const embed = d.url || convertToEmbed(d.rawUrl||'');
+    return `<div class="card">
+      <iframe src="${embed}" allowfullscreen></iframe>
+      <h3 style="color:#0b2e59">${escapeHtml(d.title||'')}</h3>
+      <div class="small">${escapeHtml(d.description||'')}</div>
+    </div>`;
+  }).join('');
+});
+
+function convertToEmbed(url){
+  try{
+    if(!url) return '';
+    if(url.includes('youtube.com/watch')) return 'https://www.youtube.com/embed/'+ new URL(url).searchParams.get('v');
+    if(url.includes('youtu.be/')) return 'https://www.youtube.com/embed/'+ url.split('youtu.be/')[1].split(/[?&]/)[0];
+    return url;
+  }catch(e){ return url; }
+}
+
+function escapeHtml(s){ return (s||'').toString().replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+</script>
+</body>
+</html>

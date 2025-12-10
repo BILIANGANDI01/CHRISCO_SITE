@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie Photos — CHRISCO</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root{--blue:#0b2e59;--red:#c50000;--white:#fff;--bg:#f5f6fa;}
+
+.page{
+  max-width:1100px;margin:30px auto;background:white;padding:20px;border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+.title{color:var(--blue);border-left:6px solid var(--red);padding-left:10px;}
+
+.grid{
+  display:grid;gap:14px;margin-top:20px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+
+.photo-card{
+  position:relative;cursor:pointer;
+}
+.photo-card img{
+  width:100%;height:180px;border-radius:10px;object-fit:cover;
+}
+
+/* Lightbox */
+#lightbox{
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:9999;
+}
+#lightbox img{
+  max-width:90%;max-height:85%;border-radius:10px;
+}
+#lightboxClose{
+  position:absolute;top:20px;right:30px;font-size:32px;color:white;cursor:pointer;
+}
+
+.back-btn{
+  background:var(--blue);color:white;text-decoration:none;
+  padding:10px 16px;border-radius:8px;display:inline-block;margin-bottom:15px;
+}
+</style>
+
+</head>
+<body>
+
+<header class="header">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="images/LOGO CHRISCO dac.png" style="height:55px">
+    <strong>CHRISCO</strong>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Accueil</a>
+    <a href="galerie_photos.html" class="active">Photos</a>
+    <a href="galerie_videos.html">Vidéos</a>
+     <a href="pasteurs.html">Nos pasteurs</a>
+
+  </nav>
+</header>
+
+<div class="page">
+
+  <a href="index.html" class="back-btn">← Retour à l'accueil</a>
+
+  <h2 class="title">Galerie Photos</h2>
+
+  <div id="photoGrid" class="grid"></div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox">
+  <span id="lightboxClose">✕</span>
+  <img id="lightboxImg">
+</div>
+
+<footer class="footer">
+  © 2025 CHRISCO — Christ et Compagnons. <br>
+  <a href="admin.html">Administration</a>
+</footer>
+
+
+<script>
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+
+const photoGrid = document.getElementById("photoGrid");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxClose = document.getElementById("lightboxClose");
+
+// Charger les photos Firestore
+db.collection("albums").doc("photos").collection("list")
+  .orderBy("date","desc")
+  .onSnapshot(snap=>{
+    if(snap.empty){
+      photoGrid.innerHTML="<p>Aucune photo disponible.</p>";
+      return;
+    }
+
+    photoGrid.innerHTML = snap.docs.map(doc=>{
+      const d = doc.data();
+      return `
+        <div class="photo-card" data-url="${d.url}">
+          <img src="${d.url}">
+        </div>`;
+    }).join("");
+
+    // Lightbox
+    document.querySelectorAll(".photo-card").forEach(card=>{
+      card.onclick = ()=>{
+        lightboxImg.src = card.dataset.url;
+        lightbox.style.display = "flex";
+      };
+    });
+  });
+
+lightboxClose.onclick = ()=> lightbox.style.display="none";
+lightbox.onclick = (e)=>{ if(e.target===lightbox) lightbox.style.display="none"; };
+</script>
+
+</body>
+</html>

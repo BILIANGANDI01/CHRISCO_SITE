@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CHRISCO — Administration</title>
+
+  <!-- Styles PRO (admin-styles.css fourni) -->
+  <link rel="stylesheet" href="admin-styles.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Firebase (compat - stable pour UI admin) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+  <!-- firebase-config.js : PLACEHOLDER (voir instructions plus bas) -->
+  <script src="firebase-config.js"></script>
+</head>
+<body>
+
+<!-- ========== LOGIN VIEW ========== -->
+<div id="loginPage">
+  <div class="login-wrapper" id="loginView">
+    <img src="icons/Bannière CHRISCO sous un ciel serein.png" class="login-logo" alt="CHRISCO">
+    <div class="login-title">Administration CHRISCO</div>
+
+    <input id="adminEmail" class="login-input" placeholder="Email admin" value="admin@chrisco.com">
+    <div class="password-wrapper">
+      <input id="adminPass" class="login-input" type="password" placeholder="Mot de passe">
+      <span id="togglePwd" class="password-toggle">👁️</span>
+    </div>
+
+    <button id="btnLogin" class="login-btn">Se connecter</button>
+
+    <div class="login-footer">
+     <a href="password.html" id="forgotLink">Mot de passe oublié ?</a>
+    </div>
+    <p id="loginMsg" style="color:#c50000;margin-top:10px"></p>
+  </div>
+</div>
+
+<!-- ========== ADMIN AREA ========== -->
+<div id="adminArea" style="display:none;">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <img src="icons/Icon chrisco.png" class="sidebar-logo" alt="logo">
+    <h3>CHRISCO Admin</h3>
+
+    <nav>
+      <a href="#" data-view="dashboard" class="active">📊 Dashboard</a>
+      <a href="#" data-view="apropos">ℹ️ A propos</a>
+      <a href="#" data-view="programme">🗓 Programme</a>
+      <a href="#" data-view="ministeres">🧭 Ministères</a>
+      <a href="#" data-view="organigramme">👥 Organigramme</a>
+      <a href="#" data-view="photos">🖼 Galerie Photos</a>
+      <a href="#" data-view="videos">🎞 Galerie Vidéos</a>
+      <a href="#" data-view="ecole">📚 École biblique</a>
+      <a href="#" data-view="groupes">🧩 Groupes</a>
+      <a href="#" data-view="implantations">📍 Implantations</a>
+      <a href="#" data-view="chrisco-tv">📺 CHRISCO TV</a>
+      <a href="#" data-view="live">🔴 Live TV</a>
+      <a href="#" data-view="chat">💬 Chat</a>
+      <a href="#" data-view="params">⚙️ Paramètres</a>
+      <a href="#" id="logoutBtn" style="margin-top:20px;">⎋ Déconnexion</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="card view">
+      <h2>📊 Tableau de bord</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div style="font-size:14px;color:var(--text-light)">Messages reçus</div>
+          <div id="statMessages" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:14px;color:var(--text-light)">Uploads (photos+videos)</div>
+          <div id="statUploads" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:14px;color:var(--text-light)">Dernier message</div>
+          <div id="statLastMsg" class="stat-value small">—</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:14px;color:var(--text-light)">Dernier upload</div>
+          <div id="statLastUpload" class="stat-value small">—</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <canvas id="chartMessages" height="80"></canvas>
+
+        
+      </div>
+    </section>
+
+    <!-- A PROPOS -->
+    <section id="view-apropos" class="card view" style="display:none;">
+      <h2>📝 À propos</h2>
+      <label>Historique</label>
+      <textarea id="histContent" rows="4"></textarea>
+
+      <label>Vision</label>
+      <textarea id="visionContent" rows="4"></textarea>
+
+      <label>Objectifs</label>
+      <textarea id="objectifsContent" rows="4"></textarea>
+
+      <label>Moyens d'actions</label>
+      <textarea id="moyensContent" rows="4"></textarea>
+
+      <button id="saveApropos" class="btn-primary">Enregistrer</button>
+    </section>
+
+    <!-- Programme -->
+    <section id="view-programme" class="card view" style="display:none;">
+      <h2>🗓 Programme</h2>
+      <textarea id="programmeContent" rows="6"></textarea>
+      <button id="saveProgramme" class="btn-primary">Enregistrer</button>
+    </section>
+
+    <!-- Ministères -->
+    <section id="view-ministeres" class="card view" style="display:none;">
+      <h2>🧭 Ministères</h2>
+
+      <div class="card">
+        <h4>Ajouter / Modifier ministère</h4>
+        <input id="min-name" placeholder="Nom du ministère">
+        <input id="min-resp" placeholder="Responsable">
+        <input id="min-contact" placeholder="Contact (tel/email)">
+        <button id="min-add" class="btn-primary">Ajouter</button>
+      </div>
+
+      <div class="card">
+        <h4>Liste des ministères</h4>
+        <table class="admin-table" id="minTable">
+          <thead><tr><th>Ministère</th><th>Responsable</th><th>Contact</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- === Admin: quick add programme (structured) === -->
+<div class="card">
+  <h4>Ajouter / éditer - Programme Semaine</h4>
+
+  <label>Jour</label>
+  <select id="progDay">
+    <option value="Lundi">Lundi</option>
+    <option value="Mardi">Mardi</option>
+    <option value="Mercredi">Mercredi</option>
+    <option value="Jeudi">Jeudi</option>
+    <option value="Vendredi">Vendredi</option>
+    <option value="Samedi">Samedi</option>
+    <option value="Dimanche">Dimanche</option>
+  </select>
+
+  <label>Heure (ex: 18h00)</label>
+  <input id="progHour" placeholder="18:00">
+
+  <label>Titre</label>
+  <input id="progTitle" placeholder="Titre du programme">
+
+  <label>Icône (prayer, bible, worship, event, conference)</label>
+  <input id="progIcon" placeholder="prayer">
+
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button id="progAddBtn" class="btn-primary">Ajouter au planning semaine</button>
+    <button id="progClearBtn" class="btn-gold">Effacer champs</button>
+  </div>
+</div>
+
+<!-- === Admin : gestion événements spéciaux === -->
+<div class="card">
+  <h4>Événements spéciaux</h4>
+  <label>Titre</label>
+  <input id="evtTitle" placeholder="Titre événement">
+  <label>Date</label>
+  <input id="evtDate" type="date">
+  <label>Heure</label>
+  <input id="evtHour" placeholder="18:00">
+  <label>Icône</label>
+  <input id="evtIcon" placeholder="event">
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button id="evtAddBtn" class="btn-primary">Ajouter événement</button>
+    <button id="evtListBtn" class="btn-gold">Rafraîchir liste</button>
+  </div>
+
+  <div id="evtAdminList" style="margin-top:12px"></div>
+</div>
+
+<!-- === Admin : Calendar Pro (FullCalendar preview / edition) === -->
+<div class="card">
+  <h4>Calendrier Pro (aperçu)</h4>
+  <!-- FullCalendar s'affichera ici -->
+  <div id="fullCalendar" style="min-height:380px"></div>
+  <p style="margin-top:10px;font-size:13px;color:#666">Double-clique sur un jour pour ajouter un événement (depuis le formulaire ci-dessus).</p>
+</div>
+
+    </section>
+
+    <!-- Organigramme -->
+    <section id="view-organigramme" class="card view" style="display:none;">
+      <h2>👥 Organigramme</h2>
+      <p>Ajoute des nœuds, liens et positions (simple table pour stockage).</p>
+
+      <div class="card">
+        <input id="org-title" placeholder="Titre (ex: Pasteur principal)">
+        <input id="org-name" placeholder="Nom">
+        <input id="org-contact" placeholder="Contact">
+        <button id="org-add" class="btn-primary">Ajouter au graphique</button>
+      </div>
+
+      <div class="card">
+        <h4>Organigramme (editable)</h4>
+        <table class="admin-table" id="orgTable"><thead><tr><th>Titre</th><th>Nom</th><th>Contact</th><th>Actions</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <!-- Galerie Photos -->
+    <section id="view-photos" class="card view" style="display:none;">
+      <h2>🖼 Galerie Photos</h2>
+      <div class="card">
+        <label>Uploader photo (ou coller URL)</label>
+        <input type="file" id="photoFile">
+        <input id="photoUrl" placeholder="ou URL directe">
+        <button id="photoAdd" class="btn-primary">Ajouter Photo</button>
+      </div>
+
+      <div class="card">
+        <h4>Aperçu</h4>
+        <div id="photoGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- Galerie Vidéos -->
+    <section id="view-videos" class="card view" style="display:none;">
+      <h2>🎞 Galerie Vidéos</h2>
+      <div class="card">
+        <input id="videoTitle" placeholder="Titre vidéo">
+        <input id="videoUrl" placeholder="URL Youtube / embed">
+        <button id="videoAdd" class="btn-primary">Ajouter Vidéo</button>
+      </div>
+
+      <div class="card">
+        <h4>Aperçu</h4>
+        <div id="videoGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- Ecole biblique -->
+    <section id="view-ecole" class="card view" style="display:none;">
+      <h2>📚 École Biblique</h2>
+      <textarea id="ecoleContent" rows="6"></textarea>
+      <button id="saveEcole" class="btn-primary">Enregistrer</button>
+    </section>
+
+    <!-- Groupes -->
+    <section id="view-groupes" class="card view" style="display:none;">
+      <h2>🧩 Groupes</h2>
+      <textarea id="groupesContent" rows="6"></textarea>
+      <button id="saveGroupes" class="btn-primary">Enregistrer</button>
+    </section>
+
+    <!-- Implantations -->
+    <section id="view-implantations" class="card view" style="display:none;">
+      <h2>📍 Implantations / Paroisses</h2>
+      <input id="imp-name" placeholder="Nom paroisse / église">
+      <input id="imp-address" placeholder="Adresse / GPS">
+      <input id="imp-contact" placeholder="Contact">
+      <button id="impAdd" class="btn-primary">Ajouter</button>
+
+      <div class="card">
+        <table class="admin-table" id="impTable"><thead><tr><th>Nom</th><th>Adresse</th><th>Contact</th><th>Actions</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <!-- CHRISCO TV -->
+    <section id="view-chrisco-tv" class="card view" style="display:none;">
+      <h2>📺 CHRISCO TV</h2>
+      <input id="tvTitle" placeholder="Titre émission / vidéo">
+      <input id="tvUrl" placeholder="URL Youtube / embed">
+      <button id="tvAdd" class="btn-primary">Ajouter</button>
+      <div id="tvGrid" class="grid" style="margin-top:14px;"></div>
+    </section>
+    <section id="view-live" class="card view" style="display:none;">
+  <h2>🔴 Gestion du LIVE CHRISCO TV</h2>
+
+  <label>Live actif ?</label>
+  <select id="liveStatus">
+    <option value="false">Désactivé</option>
+    <option value="true">Actif</option>
+  </select>
+
+  <label>URL du flux Live</label>
+  <input id="liveUrl" placeholder="https://… (HLS .m3u8 ou YouTube Live)">
+
+  <label>Titre du Live</label>
+  <input id="liveTitle" placeholder="Exemple : Culte du dimanche">
+
+  <button id="saveLive" class="btn-primary">Enregistrer</button>
+
+  <p id="liveMsg" style="margin-top:10px;color:green;"></p>
+</section>
+
+
+    <!-- Chat -->
+    <section id="view-chat" class="card view" style="display:none;">
+      <h2>💬 Chat & Messages</h2>
+      <div class="card">
+        <h4>Derniers messages</h4>
+        <div id="chatList"></div>
+      </div>
+
+  <div id="chatAdmin" class="chat-admin">
+  
+  <!-- LEFT: Conversations list -->
+  <div class="chat-users">
+    <div class="chat-users-header">
+      <h3>Conversations</h3>
+      <input id="searchUser" type="text" placeholder="Rechercher…" />
+    </div>
+
+    <div id="usersList" class="users-list"></div>
+  </div>
+
+  <!-- RIGHT: Messages -->
+  <div class="chat-box">
+    
+    <div id="chatHeader" class="chat-header">
+      Sélectionnez un utilisateur
+    </div>
+
+    <div id="messagesList" class="chat-messages"></div>
+
+    <div class="chat-input-area">
+      <input id="adminMsg" placeholder="Votre message…" />
+      <button id="sendAdminMsg">Envoyer</button>
+    </div>
+
+  </div>
+</div>
+
+
+    </section>
+
+    <!-- Paramètres -->
+    <section id="view-params" class="card view" style="display:none;">
+      <h2>⚙️ Paramètres</h2>
+      <div class="card">
+        <label>Clé API Dashboard (Firebase functions admin.key)</label>
+        <input id="cfgAdminKey" placeholder="clé (ex: chrisco2025-secret-key)">
+        <label>Email notifications (notifications.email)</label>
+        <input id="cfgEmail" placeholder="email notifications">
+        <label>Mot de passe application Gmail (notifications.pass) — ne colle pas ici si tu préfères firebase functions:config</label>
+        <input id="cfgPass" placeholder="mot de passe application (facultatif)">
+        <button id="cfgSave" class="btn-primary">Enregistrer paramètres (local)</button>
+        <p style="font-size:13px;color:#666;margin-top:12px">Remarque : pour la production, utilise <code>firebase functions:config:set</code> (recommandé).</p>
+      </div>
+    </section>
+    <section id="view-admin-logs" class="card view" style="display:none;">
+    <h2>📘 Historique des connexions administrateur</h2>
+    <div id="adminLogs"></div>
+</section>
+<a href="#" data-view="admin-logs">📘 Connexions Admin</a>
+
+
+  </main>
+</div>
+
+<!-- Popup notif container (global) -->
+<div id="notifRoot"></div>
+
+<!-- Admin script - IMPORTANT: admin-styles.css must be present -->
+<script src="admin.js"></script>
+
+</body>
+</html>

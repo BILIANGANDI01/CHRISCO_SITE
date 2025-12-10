@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évènements — CHRISCO</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root{ --blue:#0b2e59; --red:#c50000; --white:#fff; --bg:#f5f6fa; }
+
+.page{
+  max-width:1100px;margin:30px auto;background:white;
+  padding:25px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);
+}
+
+.title{
+  color:var(--blue);border-left:6px solid var(--red);padding-left:10px;
+}
+
+.event-card{
+  display:flex;
+  gap:20px;
+  background:#f8faff;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:18px;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.event-card img{
+  width:200px;
+  height:150px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.event-info h3{
+  margin:0;color:var(--blue);
+}
+.event-info small{
+  color:#444;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="images/LOGO CHRISCO dac.png" style="height:55px">
+    <strong>CHRISCO</strong>
+  </div>
+  <nav class="nav">
+    <a href="index.html">Accueil</a>
+    <a href="evenements.html" class="active">Évènements</a>
+    <a href="pasteurs.html">Nos Pasteurs</a>
+    <a href="ministeres.html">Ministères</a>
+    <a href="vision.html">Vision</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page">
+  <h2 class="title">Évènements CHRISCO</h2>
+
+  <div id="eventList"></div>
+</div>
+
+<footer class="footer">
+  © 2025 CHRISCO — Christ et Compagnons <br>
+  <a href="admin.html">Administration</a>
+</footer>
+
+<script>
+firebase.initializeApp(window.firebaseConfig);
+
+const db = firebase.firestore();
+
+db.collection("evenements")
+  .orderBy("date")
+  .onSnapshot(snap=>{
+    if(snap.empty){
+      eventList.innerHTML="<p>Aucun évènement à venir.</p>";
+      return;
+    }
+
+    eventList.innerHTML = snap.docs.map(doc=>{
+      const d = doc.data();
+      const date = d.date?.toDate().toLocaleDateString('fr-FR') || '';
+      return `
+        <div class="event-card">
+          <img src="${d.photo}" alt="">
+          <div class="event-info">
+            <h3>${d.titre}</h3>
+            <small>${date}</small>
+            <p>${d.description||""}</p>
+          </div>
+        </div>
+      `;
+    }).join("");
+  });
+</script>
+
+</body>
+</html>

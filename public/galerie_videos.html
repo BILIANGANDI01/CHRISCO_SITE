@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Galerie Vidéos — CHRISCO</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- MENU MOBILE -->
+<div class="mobile-header">
+  <div class="logo">CHRISCO</div>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+</div>
+
+<nav id="mobileMenu" class="mobile-menu">
+  <a href="index.html" class="nav-item">Accueil</a>
+  <a href="apropos.html" class="nav-item">À propos</a>
+  <a href="ministeres.html" class="nav-item">Ministères</a>
+  <a href="organigramme.html" class="nav-item">Organigramme</a>
+  <a href="programme.html" class="nav-item">Programme</a>
+  <a href="galerie_photos.html" class="nav-item">Photos</a>
+  <a href="galerie_videos.html" class="nav-item">Vidéos</a>
+  <a href="implantations.html" class="nav-item">Implantations</a>
+</nav>
+
+  <header><div class="logo"><img src="images/bg-chrisco-optimized.png" style="height:44px"></div><nav class="site-nav"><a href="index.html">Accueil</a></nav></header>
+  <main class="container">
+    <h1 style="color:var(--accent)">Galerie Vidéos</h1>
+    <div id="videosGrid" class="grid"></div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.collection("albums").doc("videos").collection("list").orderBy("date","desc").onSnapshot(snap=>{
+      const out = document.getElementById('videosGrid');
+      if(!snap.size){ out.innerHTML = '<div class="card small">Aucune vidéo.</div>'; return; }
+      out.innerHTML = snap.docs.map(d=>{
+        const data = d.data();
+        return `<div class="card"><iframe src="${data.url}" width="100%" height="180" frameborder="0" allowfullscreen style="border-radius:8px"></iframe><div style="margin-top:8px;font-weight:600">${(data.titre||'')}</div></div>`;
+      }).join('');
+    });
+  </script>
+</body>
+</html>

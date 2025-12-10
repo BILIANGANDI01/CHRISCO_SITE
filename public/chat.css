@@ -1,0 +1,42 @@
+/* chat.css — widget CHRISCO (amélioré) */
+#chriscoChatBtn {
+  position: fixed; right:18px; bottom:18px;
+  width:60px; height:60px; border-radius:50%;
+  background:linear-gradient(180deg,#0b2e59,#123b74);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.28); cursor:pointer; z-index:9999;
+  font-size:22px;
+}
+
+#chriscoChatWindow {
+  position: fixed; right:18px; bottom:90px;
+  width:360px; max-width:calc(100% - 32px);
+  height:520px; background: #fff; border-radius:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.28);
+  display:none; flex-direction:column; overflow:hidden; z-index:9999;
+}
+
+/* header */
+#chriscoChatHeader { padding:12px; background:linear-gradient(90deg,#0b2e59,#13427c); color:white; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+#chriscoChatHeader .mini-logo{ height:36px; border-radius:6px; background:white; padding:4px; }
+
+/* form area */
+#chriscoForm { padding:12px; background:#fff; border-bottom:1px solid #eee; }
+#chriscoForm .input{ width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin-bottom:8px; }
+
+/* messages area */
+#chriscoMessages { flex:1; padding:12px; overflow:auto; background:#f6f7fb; }
+.msg { margin-bottom:10px; max-width:78%; padding:8px 10px; border-radius:10px; display:inline-block; }
+.msg.user { background:linear-gradient(90deg,#0b2e59,#123b74); color:white; margin-left:auto; text-align:right; }
+.msg.admin { background:#eee; color:#111; margin-right:auto; text-align:left; }
+
+/* input row */
+#chriscoInputWrap { padding:10px; border-top:1px solid #eee; display:flex; gap:8px; align-items:center; background:white; }
+#chriscoInput { flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; }
+#chriscoSend { padding:9px 12px; border-radius:8px; border:none; cursor:pointer; background:linear-gradient(90deg,#0b2e59,#123b74); color:white; }
+
+/* small utilities */
+.small-muted{ font-size:12px; color:#666; margin-top:6px; }
+
+/* responsive */
+@media (max-width:420px){ #chriscoChatWindow { right:10px; left:10px; width:auto; height:60vh; } }

@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#1E3A8A"></circle>
+
+  <!-- Cross -->
+  <rect x="330" y="120" width="30" height="160" rx="4" fill="#ffffff"></rect>
+  <rect x="290" y="180" width="110" height="30" rx="4" fill="#ffffff"></rect>
+
+  <!-- Flame -->
+  <path d="M355 260c20 20 25 55 0 80s-70 20-85-10c-15-30 5-60 30-80 20-15 30-10 55 10Z" fill="#E63946"></path>
+
+  <!-- Pastor body -->
+  <path d="M160 350c0-70 40-110 95-110s95 40 95 110v40H160v-40Z" fill="#2D4EA2"></path>
+  
+  <!-- Pastor head -->
+  <circle cx="255" cy="205" r="60" fill="#F3C9A6"></circle>
+
+  <!-- Hair -->
+  <path d="M200 205c0-40 25-70 55-70s55 30 55 65c0 5-1 10-2 15-25-10-80-10-108 0v-10Z" fill="#3C2F2F"></path>
+
+  <!-- Beard -->
+  <path d="M220 225c0 25 20 45 35 45s35-20 35-45c-20 10-50 10-70 0Z" fill="#3C2F2F"></path>
+
+  <!-- Eyes -->
+  <circle cx="235" cy="200" r="6" fill="#1A1A1A"></circle>
+  <circle cx="275" cy="200" r="6" fill="#1A1A1A"></circle>
+
+  <!-- Bible -->
+  <rect x="185" y="285" width="110" height="90" rx="8" fill="#1A1A1A"></rect>
+  <rect x="195" y="285" width="10" height="90" fill="#EBD9A0"></rect>
+  <path d="M240 300h30v10h-30v-10Z" fill="#F2C94C"></path>
+
+  <!-- Hands -->
+  <path d="M210 310c10 20 20 35 30 35s20-15 30-35" stroke="#F3C9A6" stroke-width="12" stroke-linecap="round"></path>
+
+</svg>

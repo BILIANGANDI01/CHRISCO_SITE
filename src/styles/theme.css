@@ -1,0 +1,365 @@
+/* theme.css (color tweaks / header / footer) */
+.site-header{position:sticky;top:0;background:linear-gradient(90deg,var(--blue),#123c95);color:var(--white);padding:12px 0;z-index:100}
+.header-inner{display:flex;justify-content:space-between;align-items:center;padding:0 18px}
+.logo{height:56px;border-radius:8px;background:white;padding:6px}
+.main-nav a{color:var(--white);margin-left:12px;text-decoration:none;font-weight:600}
+.site-footer{background:linear-gradient(90deg,var(--blue),#123c95);color:white;padding:18px;text-align:center;margin-top:24px}
+
+
+/* Navigation */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  color: white;
+  font-size: 26px;
+  border: none;
+  cursor: pointer;
+}
+
+.main-nav {
+  display: flex;
+  gap: 14px;
+}
+
+.main-nav a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.main-nav a:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* Mobile menu */
+@media(max-width: 960px){
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: linear-gradient(90deg,var(--blue),#123c95);
+    flex-direction: column;
+    width: 230px;
+    padding: 15px;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+}
+/* HEADER GLOBAL */
+.site-header {
+  background: linear-gradient(90deg, var(--blue), #123c95);
+  color: white;
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+.site-header.sticky {
+  position: sticky;
+  top: 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* BRAND */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  height: 50px;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+}
+
+.brand-text .title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.brand-text .tag {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* NAVIGATION */
+.main-nav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.main-nav a,
+.dropdown-btn {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.main-nav a:hover,
+.dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ACTIVE LINK */
+.main-nav a.active {
+  background: var(--gold);
+  color: black !important;
+  font-weight: 700;
+}
+
+/* MOBILE MENU */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 960px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: linear-gradient(90deg, var(--blue), #123c95);
+    flex-direction: column;
+    width: 260px;
+    padding: 15px;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+  min-width: 180px;
+  padding: 8px 0;
+  display: none;
+  z-index: 9999;
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px 14px;
+  color: black !important;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* THEME ROOT */
+:root {
+  --blue: #0a2b6e;
+  --gold: #e5c663;
+  --bg: #f4f6fb;
+  --text: #111;
+  --card-bg: #fff;
+}
+
+[data-theme="dark"] {
+  --bg: #0f1524;
+  --text: #f3f3f3;
+  --card-bg: #1c2333;
+  --blue: #091b4a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/************************************
+    HEADER + NAV ANIMATIONS
+*************************************/
+
+.site-header {
+  background: linear-gradient(90deg, var(--blue), #123c95);
+  color: white;
+  padding: 10px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: background 0.3s ease;
+}
+
+.site-header.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.main-nav a,
+.dropdown-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: 0.25s ease;
+}
+
+.main-nav a:hover {
+  background: rgba(255,255,255,0.20);
+  transform: translateY(-2px);
+}
+
+/******** DROPDOWN ********/
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  min-width: 180px;
+  padding: 8px 0;
+  box-shadow: 0 3px 18px rgba(0,0,0,0.25);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.dropdown.open .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/******** BOUTON DON ********/
+
+.btn-don {
+  background: var(--gold);
+  color: black !important;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: 0.3s ease;
+}
+
+.btn-don:hover {
+  transform: scale(1.05);
+  background: #ffe58a;
+}
+
+/******** LIVE TV ********/
+
+.btn-live {
+  background: #e50914;
+  color: white !important;
+  padding: 6px 12px;
+  border-radius: 8px;
+  animation: pulseLive 1.5s infinite;
+  font-weight: 700;
+}
+
+@keyframes pulseLive {
+  0% { box-shadow: 0 0 0 0 rgba(229,9,20,0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(229,9,20,0); }
+  100% { box-shadow: 0 0 0 0 rgba(229,9,20,0); }
+}
+
+/******** DARK MODE SWITCH ********/
+
+.theme-switch {
+  background: transparent;
+  border: 1px solid white;
+  padding: 6px 10px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.theme-switch:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/******* MOBILE ********/
+
+.nav-toggle {
+  display: none;
+  font-size: 28px;
+  background: transparent;
+  color: white;
+  border: none;
+}
+
+@media (max-width: 960px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    display: none;
+    flex-direction: column;
+    background: linear-gradient(90deg, var(--blue), #123c95);
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 260px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    top: 0;
+    box-shadow: none;
+    background: var(--card-bg);
+  }
+}

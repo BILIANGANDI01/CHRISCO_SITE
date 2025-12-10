@@ -1,0 +1,123 @@
+/* bouton flottant */
+.chatBtn {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 60px;
+  height: 60px;
+  background: #0084ff;
+  border-radius: 50%;
+  color: white;
+  font-size: 26px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  z-index: 9999;
+}
+
+/* panneau */
+.chatPanel {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 360px;
+  height: 100vh;
+  background: white;
+  box-shadow: -3px 0 10px rgba(0,0,0,0.25);
+  transition: 0.3s ease;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+}
+
+.show {
+  right: 0;
+}
+
+/* header */
+.header {
+  background: #0084ff;
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.online {
+  color: #bcedff;
+  font-size: 12px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* messages */
+.messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: #f0f2f5;
+}
+
+.msg {
+  padding: 10px 15px;
+  border-radius: 18px;
+  margin-bottom: 10px;
+  max-width: 70%;
+  font-size: 14px;
+}
+
+.user {
+  background: #0084ff;
+  color: white;
+  margin-left: auto;
+}
+
+.admin {
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+/* input */
+.inputArea {
+  display: flex;
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #ddd;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.sendBtn {
+  background: #0084ff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  margin-left: 8px;
+  cursor: pointer;
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Dashboard — CHRISCO</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<style>
+.container{max-width:1100px;margin:20px auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.huge{font-size:28px;font-weight:700;color:#0b2e59}
+.small{color:#666}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Tableau de bord — CHRISCO</h1>
+  <div class="grid">
+    <div class="card">
+      <div class="small">Visiteurs (total)</div>
+      <div id="visitorsCount" class="huge">…</div>
+      <div class="small">Dernières 24h: <span id="visitors24">…</span></div>
+    </div>
+    <div class="card">
+      <div class="small">Messages / Chats</div>
+      <div id="chatsCount" class="huge">…</div>
+      <div class="small">Non lus: <span id="chatsUnread">…</span></div>
+    </div>
+    <div class="card">
+      <div class="small">Photos (albums)</div>
+      <div id="photosCount" class="huge">…</div>
+      <div class="small">Vidéos: <span id="videosCount">…</span></div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:22px">Activité récente</h2>
+  <div id="recentList"></div>
+</div>
+
+<script>
+if(!window.firebaseConfig) alert('firebase-config.js manquant');
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+
+async function updateCounts(){
+  // visitors total
+  const vSnap = await db.collection('visitors').get();
+  visitorsCount.textContent = vSnap.size;
+
+  // visitors last 24h
+  const since = new Date(Date.now() - 24*3600*1000);
+  const v24 = await db.collection('visitors').where('ts','>=', firebase.firestore.Timestamp.fromDate(since)).get();
+  visitors24.textContent = v24.size;
+
+  // chats
+  const cSnap = await db.collection('chats').get();
+  chatsCount.textContent = cSnap.size;
+  // unread = chats with field unread=true on chat doc or messages? depends—here sample:
+  const unread = await db.collection('chats').where('unread', '==', true).get();
+  chatsUnread.textContent = unread.size;
+
+  // photos
+  const pSnap = await db.collection('albums').doc('photos').collection('list').get();
+  photosCount.textContent = pSnap.size;
+
+  // videos
+  const vSnap2 = await db.collection('albums').doc('videos').collection('list').get();
+  videosCount.textContent = vSnap2.size;
+}
+
+function listenRecent(){
+  // recent events: visitors + chats (last 10)
+  db.collection('visitors').orderBy('ts','desc').limit(5).onSnapshot(snap=>{
+    const html = snap.docs.map(d=>{
+      const data = d.data(); const t = data.ts && data.ts.toDate ? data.ts.toDate().toLocaleString() : '';
+      return `<div class="card"><small>Visiteur</small><div>${data.path} · ${t}</div></div>`;
+    }).join('');
+    recentList.innerHTML = html;
+  });
+}
+
+updateCounts();
+listenRecent();
+// also refresh counts every 60s
+setInterval(updateCounts, 60000);
+</script>
+</body>
+</html>

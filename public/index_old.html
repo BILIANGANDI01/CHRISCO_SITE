@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CHRISCO — Christ et Compagnons</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon-64.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('Service worker enregistré:', reg))
+      .catch(err => console.error('Erreur SW:', err));
+  });
+}
+</script>
+
+</head>
+<body><!-- ======= MENU DE NAVIGATION CHRISCO ======= -->
+<nav style="
+  background: linear-gradient(90deg, #0f1a3a, #1e5bd9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 25px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+">
+  <div style="display:flex; align-items:center;">
+    <img src='images/bg-chrisco-optimized.png' alt='Logo CHRISCO' style='height:45px; margin-right:10px;'>
+    <span style="color:white; font-size:1.2rem; font-weight:600;">CHRISCO</span>
+  </div>
+
+  <div id="nav-links" style="display:flex; gap:20px; flex-wrap:wrap;">
+    <a href="index.html" data-page="index.html" style="color:white; text-decoration:none;">🏠 Accueil</a>
+    <a href="ministeres.html" data-page="ministeres.html" style="color:white; text-decoration:none;">✝️ Ministères</a>
+    <a href="organisation.html" data-page="organisation.html" style="color:white; text-decoration:none;">🧩 Organisation</a>
+    <a href="programme.html" data-page="programme.html" style="color:white; text-decoration:none;">📅 Programme</a>
+    <a href="contact.html" data-page="contact.html" style="color:white; text-decoration:none;">📞 Contact</a>
+    <a href="admin.html" target="_blank" style="color:#66a3ff; text-decoration:none;">🔒 Admin</a>
+  </div>
+
+  <button id="menu-btn" style="
+    background:none; border:none; color:white;
+    font-size:1.8rem; display:none; cursor:pointer;">☰</button>
+</nav>
+
+<script>
+  // --- Menu responsive ---
+  const menuBtn = document.getElementById("menu-btn");
+  const navLinks = document.getElementById("nav-links");
+
+  menuBtn.addEventListener("click", () => {
+    const isVisible = navLinks.style.display === "flex";
+    navLinks.style.display = isVisible ? "none" : "flex";
+    navLinks.style.flexDirection = "column";
+    navLinks.style.background = "#0f1a3a";
+    navLinks.style.padding = "10px";
+    navLinks.style.borderRadius = "10px";
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) navLinks.style.display = "flex";
+    else navLinks.style.display = "none";
+  });
+
+  if (window.innerWidth <= 768) menuBtn.style.display = "block";
+
+  // --- Surlignage automatique du lien actif ---
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  const links = document.querySelectorAll("#nav-links a[data-page]");
+  links.forEach(link => {
+    if (link.getAttribute("data-page") === currentPage) {
+      link.style.color = "#66a3ff";
+      link.style.fontWeight = "600";
+      link.style.textDecoration = "underline";
+    }
+  });
+</script>
+<!-- ======= FIN DU MENU ======= -->
+
+  <header class="topbar">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="LOGO CHRISCO dac.png" alt="CHRISCO logo" class="logo"/>
+        <div class="titles">
+          <h1>Christ et Compagnons <span class="short">CHRISCO</span></h1>
+          <p class="tag">Sanctuaire de restauration</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero" style="background-image:url('Eglise.jpg')">
+      <div class="overlay"></div>
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h2>Bienvenue à l'Église Christ et Compagnons — CHRISCO</h2>
+          <p class="lead">Sanctuaire de restauration</p>
+          <div class="cta">
+            <a href="#about" class="btn primary">Découvrir plus</a>
+            <a href="ministeres.html" class="btn primary">Ministères & Services</a>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about container">
+      <div class="grid">
+        <div class="col text">
+          <h3>Brève historique notre Église</h3>
+          <p>La vision de CHRISCO a été reçue en 1978 par l’Apôtre Harry Das en compagnie de sa femme Cora Das et de leur fils John Das qui sont les fondateurs de l’église CHRISCO internationale (pour l’avancement du royaume de Dieu). Cette vision a été introduite en République Démocratique du Congo par l’entremise du Révérend Samuel Dikaniakina en 1984. En vue cela, il a dû sacrifier son poste de chef des travaux à la faculté d’agronomie à la IFA Yangambi pour se consacrer entièrement avec sa famille à l’œuvre de CHRISCO.</p>
+        </div>
+        <div class="col image">
+          <img src="Historique.jpg" alt="Prédication CHRISCO">
+          <img src="Historique2.jpg" alt="Prédication CHRISCO">
+          <img src="Historique ASD.jpg" alt="Prédication CHRISCO">
+        </div>
+      </div>
+    </section>
+
+    <section id="vision" class="section container">
+  <h3>Vision de l'Église</h3>
+  <p>La vision est « la restauration intégrale de l’être humain et de l’église du Seigneur Jésus-Christ selon le modèle de l’Apôtre Paul. »
+Elle ambitionne pour cela à implanter et développer des églises du Nouveau Testament au modèle de l’Apôtre Paul pour atteindre la perfection chrétienne par la pratique adéquate du ministère quintuple.
+</p>
+</section>
+
+<section id="objectives" class="section container">
+  <h3>Objectifs</h3>
+  <ul>
+    <li>Prêcher et enseigner le plein évangile de Jésus-Christ.</li>
+    <li>Amener les âmes à Christ .</li>
+    <li>Prier pour les Nations .</li>
+    <li>Prendre soin des besoins vitaux de l’homme complet.</li>
+    <li>Assurer le discipolat des hommes et des femmes de Dieu pour le ministère quintuple et autres.</li>
+    <li>Encadrer les enfants et les jeunes .</li>
+    <li>Implanter les églises du Nouveau Testament selon le modèle de l’Apôtre Paul.</li>
+    <li>Rendre des services ministériels au Corps du Christ.</li>
+    <li>Préparer l’église au grand réveil spirituel (Joël) et au retour imminent de notre Seigneur Jésus-Christ.</li>
+    <li>Développer des experts en relation d’aide biblique ou counselling (Toute aide affectée à un individu pour le faire sortir d’une impasse).</li>
+    <li>Créer une culture chrétienne par :
+<ul>1. Les spectacles religieux</ul> 
+<ol>2. Les programmes de radio et télévision </ol>
+<ol>3. La production des cassettes audio et vidéo</ol> 
+<ol>4. Des littératures</ol> 
+.</li>
+    <li>Rééduquer et réhabiliter les alcooliques, les drogues, les prostituées et les victimes d’autres vices.</li>
+    <li>Recourir aux organisations crédibles pour une assistance dans l’accomplissement des objectifs de l’église avec ces dernières.</li>
+    <li>Assurer la formation :</li>
+<ol>1. Scolaire </ol> 
+<ol>2. Académique  </ol>
+<ol>3. Morale </ol> 
+<ol>4. Spirituelle </ol> 
+<ol>5. Professionnelle  </ol> 
+    <li>Promouvoir des projets de développement communautaire.</li>
+  </ul>
+</section>
+
+<section id="actions" class="section container">
+  <h3>Moyens d’Action</h3>
+  <ul>
+    <li>Projets agricoles, des fermes, zootechniques etc…</li>
+    <li>Centres de santé, des hôpitaux et des cliniques (médicales, psychologiques et psychiatriques).</li>
+    <li>Maisons des vieillards, des handicapes (cas spéciaux), des démunis, des orphelins et des enfants sans abri.</li>
+    <li>Chaines de radiotélévision.</li>
+    <li>Centres de rééducation et de réhabilitation des personnes déséquilibrées etc… </li>
+  </ul>
+</section>
+
+
+    <section id="programs" class="section container">
+      <h3>Programme des cultes</h3>
+      <div class="cards">
+        <div class="card"><strong>Dimanche</strong><div>7h & 10h - Culte principal</div></div>
+        <div class="card"><strong>Mardi Losambo</strong><div>16h & 18h - Culte prière</div></div>
+        <div class="card"><strong>Jeudi Malakisi</strong><div>16 & 18h - Culte d'enseignement</div></div>
+        <div class="card"><strong>Samedi</strong><div>14h - Groupe de jeunes</div></div>
+      </div>
+    </section>
+
+
+    <section id="download-package" class="section container">
+      <h3>Télécharger le package CHRISCO</h3>
+      <p>Obtenez le package complet comprenant le site, les images et le backend.</p>
+      <a class="btn-download" href="https://drive.google.com/uc?export=download&id=1qUxd3xy9oL3FCiBUJP62Wr_dz9V1SrsJ" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px"><path fill="#fff" d="M5 20h14v-2H5v2zm7-18L5.33 9h3.67v4h6V9h3.67L12 2z"/></svg>
+        Télécharger le package CHRISCO
+      </a>
+    </section>
+
+
+
+    <section id="gallery" class="section container">
+      <h3>Galerie</h3>
+      <div class="gallery-grid">
+        <img src="culte3.jpeg" alt="">
+        <img src="culte2.jpeg" alt="">
+        <img src="culte1.jpg" alt="">
+        <img src="culte3.jpeg" alt="">
+        <img src="culte2.jpeg" alt="">
+        <img src="culte1.jpg" alt="">
+        <img src="culte3.jpeg" alt="">
+        <img src="culte2.jpeg" alt="">
+        <img src="culte1.jpg" alt="">
+        <img src="culte3.jpeg" alt="">
+        <img src="culte2.jpeg" alt="">
+        <img src="culte1.jpg" alt="">
+        <img src="culte3.jpeg" alt="">
+        <img src="culte2.jpeg" alt="">
+        <img src="culte1.jpg" alt="">
+        <img src="culte3.jpeg" alt="">
+      </div>
+    </section>
+
+    <section id="contact" class="section container">
+      <h3>Contact</h3>
+      <form id="contact-form" class="form">
+        <input placeholder="Nom" required>
+        <input type="email" placeholder="Email" required>
+        <textarea placeholder="Message" required></textarea>
+        <button type="submit" class="btn primary">Envoyer</button>
+        <div id="contact-status" class="status"></div>
+      </form>
+    </section>
+  </main>
+
+
+<script>
+document.getElementById('booking-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('booking-status').textContent = "Demande envoyée — merci !";
+});
+document.getElementById('contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('contact-status').textContent = "Message envoyé — merci !";
+});
+</script>
+
+<!-- ======== Pied de page CHRISCO ======== -->
+<footer style="
+  background: linear-gradient(90deg, #0f1a3a, #1e5bd9);
+  color: #fff;
+  text-align: center;
+  padding: 30px 10px;
+  font-size: 0.9rem;
+  border-top: 3px solid #1e5bd9;
+">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <p style="margin: 0; font-weight: 500;">
+      © 2025 Église CHRISCO — Christ et Compagnons (CHRISCO)
+    </p>
+    <p style="margin: 8px 0 0 0; color: #d0d6ff;">
+      “Une communauté en mission, unis dans la foi et l’amour du Christ.”
+    </p>
+    <p style="margin-top: 15px;">
+      <a href="admin.html" target="_blank" 
+         style="color: #66a3ff; text-decoration: none; font-size: 0.85rem;">
+         🔒 Espace administrateur
+      </a>
+    </p>
+  </div>
+</footer>
+<!-- ======== Fin du pied de page ======== -->
+
+</body>
+</html>

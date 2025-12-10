@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>À propos — CHRISCO</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- MENU MOBILE -->
+<div class="mobile-header">
+  <div class="logo">CHRISCO</div>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+</div>
+
+<nav id="mobileMenu" class="mobile-menu">
+  <a href="index.html" class="nav-item">Accueil</a>
+  <a href="apropos.html" class="nav-item">À propos</a>
+  <a href="ministeres.html" class="nav-item">Ministères</a>
+  <a href="organigramme.html" class="nav-item">Organigramme</a>
+  <a href="programme.html" class="nav-item">Programme</a>
+  <a href="galerie_photos.html" class="nav-item">Photos</a>
+  <a href="galerie_videos.html" class="nav-item">Vidéos</a>
+  <a href="implantations.html" class="nav-item">Implantations</a>
+  <a href="histoire.html" class="nav-item">Historique</a>
+</nav>
+
+  <header>
+    <div class="logo">
+      <img src="images/Bannière CHRISCO sous un ciel serein.png" style="height:44px">
+      <div><strong>CHRISCO</strong><div class="small">Église Christ et Compagnons</div></div>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html">Accueil</a>
+      <a href="ministeres.html">Ministères</a>
+      <a href="programme.html">Programme</a>
+      <a href="galerie_photos.html">Photos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:20px">
+      <div style="background-image:url('images/bg-chrisco.png');background-size:cover;padding:18px;border-radius:10px;margin-bottom:14px">
+        <h1 style="color:var(--accent)">À propos de CHRISCO</h1>
+      </div>
+
+      <div id="contentApropos">Chargement…</div>
+      <div style="margin-top:12px">
+        <label class="small">Langue</label>
+        <select id="langSelect" class="input" style="width:160px;margin-top:6px">
+          <option value="fr">Français</option>
+          <option value="ln">Lingala</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const langSelect = document.getElementById('langSelect');
+    const chosen = localStorage.getItem('lang') || 'fr';
+    langSelect.value = chosen;
+
+    function render(d, lang){
+      const hist = d[`historiqueHtml_${lang}`] || d.historiqueHtml || '';
+      const vision = d[`visionHtml_${lang}`] || d.visionHtml || '';
+      const objectifs = d[`objectifsHtml_${lang}`] || d.objectifsHtml || '';
+      const moyens = d[`moyensHtml_${lang}`] || d.moyensHtml || '';
+      document.getElementById('contentApropos').innerHTML = `
+        <section class="card"><h3>📘 Brève historique</h3><div>${hist}</div></section>
+        <section class="card" style="margin-top:12px"><h3>🎯 Vision</h3><div>${vision}</div></section>
+        <section class="card" style="margin-top:12px"><h3>🎯 Objectifs</h3><div>${objectifs}</div></section>
+        <section class="card" style="margin-top:12px"><h3>⚙️ Moyens d'actions</h3><div>${moyens}</div></section>
+      `;
+    }
+
+    const aproposRef = db.collection('apropos').doc('infos');
+    aproposRef.onSnapshot(snap=>{
+      if(!snap.exists){ document.getElementById('contentApropos').innerHTML = '<p class="small">Aucune information.</p>'; return; }
+      render(snap.data(), langSelect.value);
+    });
+
+    langSelect.addEventListener('change', e => {
+      localStorage.setItem('lang', e.target.value);
+      // re-render (read current doc)
+      aproposRef.get().then(s=>{ if(s.exists()) render(s.data(), e.target.value); });
+    });
+  </script>
+</body>
+</html>

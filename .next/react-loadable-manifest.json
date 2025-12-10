@@ -1,0 +1,14 @@
+{
+  "_app.js -> ../components/ChatWidget/ChatWidget": {
+    "id": "_app.js -> ../components/ChatWidget/ChatWidget",
+    "files": [
+      "static/chunks/src_components_ChatWidget_ChatWidget_jsx.js"
+    ]
+  },
+  "index.js -> ../components/ChatWidget/ChatWidget": {
+    "id": "index.js -> ../components/ChatWidget/ChatWidget",
+    "files": [
+      "static/chunks/src_components_ChatWidget_ChatWidget_jsx.js"
+    ]
+  }
+}

@@ -1,0 +1,508 @@
+/* ============================================================
+   CHRISCO ADMIN — PREMIUM UI 2025
+   Mode Clair + Dark - Glass + Neumorphism
+   ============================================================ */
+
+:root {
+    /* Light mode */
+    --bg: #f4f6fa;
+    --bg-alt: rgba(255,255,255,0.7);
+    --text: #1a1c1e;
+    --text-light: #6d6f73;
+    --primary: #0b2e59;
+    --primary-light: #134b8a;
+    --gold: #e5c663;
+    --card: rgba(255,255,255,0.8);
+    --shadow: 0 10px 25px rgba(0,0,0,0.08);
+    --radius: 16px;
+    --blur: 18px;
+}
+
+/* DARK MODE -------------------------------------------------- */
+.dark-mode {
+    --bg: #0f141a;
+    --bg-alt: rgba(20,25,33,0.7);
+    --text: #e9ecf2;
+    --text-light: #b6bcc7;
+    --primary: #1d5ed8;
+    --primary-light: #3874f2;
+    --gold: #f1d279;
+    --card: rgba(30,36,46,0.7);
+    --shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* RESET ------------------------------------------------------ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", Arial, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+
+#loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+}
+
+.login-wrapper {
+    width: 340px;
+    padding: 35px;
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+}
+
+.login-logo {
+    width: 85px;
+    margin-bottom: 12px;
+}
+
+.login-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 15px;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    margin-top: 8px;
+    box-shadow: var(--shadow);
+    transition: 0.2s;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ============================================================
+   ADMIN LAYOUT
+   ============================================================ */
+
+#adminArea {
+    display: flex;
+    height: 100vh;
+}
+
+/* SIDEBAR ---------------------------------------------------- */
+.sidebar {
+    width: 260px;
+    padding: 25px;
+    background: var(--card);
+    backdrop-filter: blur(var(--blur));
+    box-shadow: var(--shadow);
+    border-right: 1px solid rgba(255,255,255,0.2);
+    animation: slideLeft 0.5s ease;
+}
+
+.sidebar-logo {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+/* SIDEBAR LINKS */
+.sidebar nav a {
+    display: block;
+    padding: 12px 15px;
+    border-radius: var(--radius);
+    color: var(--text);
+    text-decoration: none;
+    margin-bottom: 6px;
+    transition: 0.2s;
+    font-size: 15px;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    transform: translateX(4px);
+}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+
+.main-content {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+}
+
+/* TITLES */
+h2 {
+    margin-bottom: 18px;
+    font-weight: 600;
+}
+
+/* ============================================================
+   CARDS - PREMIUM GLASS STYLE
+   ============================================================ */
+
+.card {
+    background: var(--card);
+    padding: 22px;
+    border-radius: var(--radius);
+    margin-bottom: 22px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--blur));
+}
+
+/* ============================================================
+   BUTTONS (primary, gold, danger, subtle)
+   ============================================================ */
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: var(--shadow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-gold {
+    background: linear-gradient(135deg, var(--gold), #f7e7ab);
+    color: #3a2e0a;
+    padding: 10px 18px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.btn-danger {
+    background: #c0392b;
+    color: white;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #a8281f;
+}
+
+/* ============================================================
+   INPUTS / TEXTAREAS
+   ============================================================ */
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    background: rgba(255,255,255,0.9);
+    margin-bottom: 12px;
+    transition: 0.2s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(19,75,138,0.2);
+}
+
+/* ============================================================
+   GRID FOR PHOTOS & VIDEOS
+   ============================================================ */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap: 18px;
+}
+
+.photo-card img,
+.video-card iframe {
+    width: 100%;
+    height: 160px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    box-shadow: var(--shadow);
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(var(--blur));
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.admin-table th {
+    background: var(--primary);
+    color: white;
+    padding: 14px;
+    font-weight: 600;
+}
+
+.admin-table td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ============================================================
+   CHAT
+   ============================================================ */
+
+.chat-item {
+    padding: 12px;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+    backdrop-filter: blur(var(--blur));
+}
+
+/* ============================================================
+   NOTIFICATIONS
+   ============================================================ */
+
+.notif {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    background: var(--primary);
+    color: white;
+    padding: 14px 22px;
+    border-radius: var(--radius);
+    backdrop-filter: blur(var(--blur));
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.4s ease;
+}
+
+/* ============================================================
+  DARK MODE SWITCH (OPTION)
+  ============================================================ */
+
+.dark-toggle {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: var(--primary);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+    from { transform: translateX(-250px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+/* Programme admin additions */
+.card select, .card input[type="date"], .card input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* small screens */
+@media (max-width: 720px) {
+  .sidebar { display: none; } /* si tu veux full width admin on mobile */
+  #adminArea { flex-direction: column; }
+  .card { margin: 12px; padding: 14px; }
+  #fullCalendar { min-height: 320px; }
+}
+.chat-admin {
+  display: flex;
+  height: 85vh;
+  gap: 20px;
+}
+
+/* LEFT SIDEBAR */
+.chat-users {
+  width: 300px;
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.chat-users-header {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-users-header input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.users-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.user-row {
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.user-row:hover {
+  background: #f7f9fc;
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #0084ff22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+.user-last {
+  font-size: 12px;
+  color: #666;
+}
+
+.badge-new {
+  background: red;
+  color: white;
+  padding: 3px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+/* RIGHT PANEL */
+.chat-box {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.chat-header {
+  padding: 15px 20px;
+  background: #0084ff;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: #eef1f7;
+}
+
+.msg-item {
+  max-width: 65%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.msg-user {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.msg-admin {
+  background: #0084ff;
+  color: white;
+  margin-left: auto;
+}
+
+.chat-input-area {
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.chat-input-area button {
+  background: #0084ff;
+  border-radius: 20px;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}

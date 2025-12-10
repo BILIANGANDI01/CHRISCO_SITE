@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHRISCO — Vision</title>
+
+<link rel="stylesheet" href="styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root{--blue:#0b2e59;--red:#c50000;--white:#fff;--bg:#f5f6fa;}
+.page{max-width:850px;margin:30px auto;background:var(--white);padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.title{border-left:6px solid var(--red);padding-left:10px;color:var(--blue);}
+h3{color:var(--red);}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="images/LOGO CHRISCO dac.png" style="height:55px">
+    <strong>CHRISCO</strong>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Accueil</a>
+    <a href="ministeres.html">Ministères</a>
+    <a href="organigramme.html">Organigramme</a>
+    <a href="programme.html">Programme</a>
+    <a href="vision.html" class="active">Vision</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page">
+  <h2 class="title">Vision & Mission de l’Église CHRISCO</h2>
+
+  <h3>Historique</h3>
+  <div id="hist"></div>
+
+  <h3>Vision</h3>
+  <div id="vision"></div>
+
+  <h3>Objectifs</h3>
+  <div id="obj"></div>
+
+  <h3>Moyens d’actions</h3>
+  <div id="moyens"></div>
+</div>
+
+<footer class="footer">
+  © 2025 CHRISCO — Christ et Compagnons. <br>
+  <a href="admin.html">Administration</a>
+</footer>
+
+<script>
+firebase.initializeApp(window.firebaseConfig);
+const db=firebase.firestore();
+
+db.collection("apropos").doc("infos").onSnapshot(s=>{
+  if(!s.exists) return;
+  const d=s.data();
+  hist.innerHTML=d.historique_fr||"";
+  obj.innerHTML=d.objectifs_fr||"";
+  moyens.innerHTML=d.moyens_fr||"";
+});
+
+db.collection("vision").doc("infos").onSnapshot(s=>{
+  if(s.exists) vision.innerHTML=s.data().vision_fr||"";
+});
+</script>
+
+</body>
+</html>

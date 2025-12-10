@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Firebase — CHRISCO Admin</title>
+</head>
+<body style="font-family:sans-serif; text-align:center; padding-top:100px;">
+
+  <h1>🔧 Test de connexion Firebase</h1>
+  <p>Ce test vérifie que Firestore est bien connecté et accessible.</p>
+  <button id="btnTest" style="padding:10px 20px; font-size:16px;">Tester la connexion 🔥</button>
+
+  <p id="result" style="margin-top:30px; font-weight:bold;"></p>
+
+  <!-- 🔹 Scripts Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+    // 🔹 Initialisation Firebase
+    try {
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      document.getElementById("btnTest").addEventListener("click", async () => {
+        try {
+          await db.collection("tests").add({
+            message: "Connexion réussie ✅",
+            date: new Date()
+          });
+          document.getElementById("result").innerText = "✅ Connexion à Firestore réussie ! (document créé dans la collection 'tests')";
+          document.getElementById("result").style.color = "green";
+        } catch (e) {
+          document.getElementById("result").innerText = "❌ Erreur Firestore : " + e.message;
+          document.getElementById("result").style.color = "red";
+        }
+      });
+    } catch (err) {
+      document.getElementById("result").innerText = "❌ Firebase non initialisé : " + err.message;
+      document.getElementById("result").style.color = "red";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "Église Christ et Compagnons - CHRISCO",
+  "short_name": "CHRISCO",
+  "description": "Église Christ et Compagnons — Une famille unie dans la foi.",
+  "lang": "fr",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#123C8A",
+  "icons": [
+  { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+  { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+]
+   
+}

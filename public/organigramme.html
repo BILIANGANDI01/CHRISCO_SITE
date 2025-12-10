@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHRISCO — Organigramme</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root { --blue:#0b2e59; --red:#c50000; --white:#fff; --bg:#f5f6fa; }
+
+.page { max-width:1000px; margin:30px auto; padding:20px; background:var(--white); border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,.08); }
+
+.title { color:var(--blue); border-left:6px solid var(--red); padding-left:10px; }
+
+.card-org {
+  background:#fafbff;
+  border-left:4px solid var(--blue);
+  padding:15px;
+  margin-bottom:12px;
+  border-radius:8px;
+}
+.card-org strong { color:var(--blue);font-size:17px; }
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="images/LOGO CHRISCO dac.png" style="height:55px">
+    <strong>CHRISCO</strong>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Accueil</a>
+    <a href="organigramme.html" class="active">Organigramme</a>
+    <a href="implantations.html">Implantations</a>
+  </nav>
+</header>
+
+<div class="page">
+  <h2 class="title">Organigramme de l’Église</h2>
+  <div id="orgaList"></div>
+</div>
+
+<footer class="footer">
+  © 2025 CHRISCO — Christ et Compagnons. <br>
+  <a href="admin.html">Administration</a>
+</footer>
+
+<script>
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+
+const container = document.getElementById("orgaList");
+
+db.collection("organigramme").orderBy("date","desc").onSnapshot(snap=>{
+  if(snap.empty){ container.innerHTML="<p>Aucune donnée</p>"; return;}
+  container.innerHTML = snap.docs.map(doc=>{
+    const d = doc.data();
+    return `<div class="card-org">
+      <strong>${d.poste}</strong><br>
+      ${d.nom}<br>
+      <small>${d.contact||''}</small>
+    </div>`;
+  }).join("");
+});
+</script>
+
+</body>
+</html>

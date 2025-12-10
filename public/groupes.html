@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Groupes — CHRISCO</title>
+
+<link rel="stylesheet" href="styles.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<style>
+:root{--blue:#0b2e59;--red:#c50000;--bg:#f5f6fa}
+body{font-family:Inter,Arial;background:var(--bg);margin:0}
+.header{position:sticky;top:0;background:var(--blue);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.container{max-width:1100px;margin:20px auto;padding:16px}
+.title{color:var(--blue);border-left:6px solid var(--red);padding-left:10px}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.group{background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(9,30,66,.04);display:flex;gap:16px;align-items:flex-start}
+.group img{width:120px;height:80px;object-fit:cover;border-radius:8px}
+.info h3{margin:0 0 6px 0;color:var(--blue)}
+.info p{margin:0;color:#444}
+.badge{background:var(--red);color:white;padding:6px 8px;border-radius:8px;font-size:13px}
+</style>
+</head>
+<body>
+<header class="header">
+  <div style="display:flex;gap:10px;align-items:center">
+    <img src="images/LOGO CHRISCO dac.png" style="height:48px">
+    <strong>CHRISCO</strong>
+  </div>
+  <nav><a href="index.html" style="color:#fff;text-decoration:none">Accueil</a></nav>
+</header>
+
+<main class="container">
+  <h2 class="title">Groupes CHRISCO</h2>
+  <p class="small">Groupes de vie, études bibliques et services. Contactez l'administration pour rejoindre.</p>
+
+  <div id="groups" class="list">Chargement…</div>
+</main>
+
+<footer style="background:var(--blue);color:#fff;padding:16px;text-align:center">© 2025 CHRISCO</footer>
+
+<script>
+if(!window.firebaseConfig) alert('firebase-config.js manquant');
+firebase.initializeApp(window.firebaseConfig);
+const db = firebase.firestore();
+const groups = document.getElementById('groups');
+
+db.collection('groupes').orderBy('nom').onSnapshot(snap=>{
+  if(snap.empty){ groups.innerHTML = '<div class="card">Aucun groupe listé.</div>'; return; }
+  groups.innerHTML = snap.docs.map(doc=>{
+    const d = doc.data();
+    return `<div class="group">
+      ${d.photo ? `<img src="${d.photo}" alt="">` : '<div style="width:120px;height:80px;background:#eef;border-radius:8px"></div>'}
+      <div class="info">
+        <h3>${escapeHtml(d.nom||'')}</h3>
+        <div class="small">${escapeHtml(d.description||'')}</div>
+        <div style="margin-top:8px"><strong>Responsable:</strong> ${escapeHtml(d.contact||'')}</div>
+      </div>
+      <div style="margin-left:auto"><span class="badge">${escapeHtml(d.jour||'')}</span></div>
+    </div>`;
+  }).join('');
+});
+
+function escapeHtml(s){ return (s||'').toString().replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+</script>
+</body>
+</html>
